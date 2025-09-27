@@ -1,0 +1,28 @@
+const mongoose = require("mongoose");
+
+const menuSchema = new mongoose.Schema(
+    {
+      menu: [
+        {
+          category: { type: String },
+          items: [
+            {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: "FoodItem", // tham chiếu đến schema FoodItem
+            },
+          ],
+        },
+      ],
+      restaurant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Restaurant", // tham chiếu đến schema Restaurant
+      },
+    },
+    {
+      toJSON: { virtuals: true },
+      toObject: { virtuals: true },
+    }
+);
+
+const Menu = mongoose.model("Menu", menuSchema);
+module.exports = Menu;
