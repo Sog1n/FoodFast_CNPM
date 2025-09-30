@@ -6,35 +6,73 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
 
 // @desc    Create new order
 // @route   POST /api/v1/orders
-exports.newOrder = catchAsyncErrors(async (req, res, next) => {
-    const {
-        orderItems,
-        deliveryInfo,
-        itemsPrice,
-        taxPrice,
-        deliveryCharge,
-        finalTotal,
-        paymentInfo,
-    } = req.body;
+exports.newOrder = async (req, res, next) => {
+    try {
+        const {
+            orderItems,
+            deliveryInfo,
+            itemsPrice,
+            taxPrice,
+            deliveryCharge,
+            finalTotal,
+            paymentInfo,
+        } = req.body;
 
-    const order = await Order.create({
-        orderItems,
-        deliveryInfo,
-        itemsPrice,
-        taxPrice,
-        deliveryCharge,
-        finalTotal,
-        paymentInfo,
-        paidAt: Date.now(),
-        user: req.user.id,          // Lấy từ middleware auth
-        restaurant: req.restaurant.id, // Gắn restaurant vào order
-    });
+        const order = await Order.create({
+            orderItems,
+            deliveryInfo,
+            itemsPrice,
+            taxPrice,
+            deliveryCharge,
+            finalTotal,
+            paymentInfo,
+            paidAt: Date.now(),
+            user: req.user.id,          // Lấy từ middleware auth
+            restaurant: req.body.restaurant, // Gắn restaurant vào order
+        });
 
-    res.status(200).json({
-        success: true,
-        order,
-    });
-});
+        res.status(200).json({
+            success: true,
+            order,
+        });
+    } catch (err) {
+        console.error("Error in newOrder:", err);
+        res.status(500).json({
+            status: "fail",
+            message: err.message
+        });
+    }
+}
+
+// exports.newOrder = catchAsyncErrors(async (req, res, next) => {
+//     const {
+//         orderItems,
+//         deliveryInfo,
+//         itemsPrice,
+//         taxPrice,
+//         deliveryCharge,
+//         finalTotal,
+//         paymentInfo,
+//     } = req.body;
+//
+//     const order = await Order.create({
+//         orderItems,
+//         deliveryInfo,
+//         itemsPrice,
+//         taxPrice,
+//         deliveryCharge,
+//         finalTotal,
+//         paymentInfo,
+//         paidAt: Date.now(),
+//         user: req.user.id,          // Lấy từ middleware auth
+//         restaurant: req.restaurant.id, // Gắn restaurant vào order
+//     });
+//
+//     res.status(200).json({
+//         success: true,
+//         order,
+//     });
+// });
 
 // @desc    Get single order by ID
 // @route   GET /api/v1/orders/:id

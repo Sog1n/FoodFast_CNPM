@@ -22,7 +22,7 @@ exports.processPayment = catchAsyncErrors(async (req, res, next) => {
 });
 
 // @desc    Send Stripe API Key to frontend
-// @route   GET /api/v1/stripeapikey
+
 exports.sendStripApi = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         stripeApiKey: process.env.STRIPE_API_KEY,

@@ -6,7 +6,7 @@ const { processPayment, sendStripApi } = require("../controllers/paymentControll
 
 // Route xử lý thanh toán
 router
-    .route("/payment/process")
+    .route("/process")
     .post(authController.protect, processPayment);
 
 // Route lấy Stripe API key
